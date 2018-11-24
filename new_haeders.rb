@@ -1,6 +1,6 @@
 class NewsHeaders
 	attr_accessor :headers
-	def initialize(headers)
+	def initialize()
 		@headers ||= []
 	end
 end

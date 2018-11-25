@@ -12,7 +12,9 @@ news_content = []
 news_images = []
 
 options = Selenium::WebDriver::Chrome::Options.new(args: ['headless'])
+binding.pry
 driver = Selenium::WebDriver.for(:chrome, options: options)
+binding.pry
 driver.get('https://www.onliner.by/')
 
 puts driver.title

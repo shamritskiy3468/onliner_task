@@ -5,6 +5,7 @@ require 'csv'
 # class for writing data from onliner in csv
 class CSVWriter
   attr_accessor :file
+
   def initialize(file)
     @file = file
     @data_to_write = []

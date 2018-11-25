@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'selenium-webdriver'
-require 'csv'
+require './csv_writer'
 require './constants'
 require 'pry'
 
@@ -10,11 +10,17 @@ class Scrapper
   attr_accessor :options, :driver
 
   def initialize
-    @options = Selenium::WebDriver::Chrome::Options.new(args: ['headless'])
-    @driver = Selenium::WebDriver.for(:chrome, options: @options).get('https://www.onliner.by/')
+    @driver = init_web_driver
     @images = []
     @titles = []
     @contents = []
+  end
+
+  def init_web_driver
+    options = Selenium::WebDriver::Chrome::Options.new(args: ['headless'])
+    driver = Selenium::WebDriver.for(:chrome, options: options)
+    driver.get('https://www.onliner.by/')
+    driver
   end
 
   def connect
@@ -30,7 +36,7 @@ class Scrapper
     end
     all_info
     writer = CSVWriter.new('onliner_data.csv')
-    writer.prepare_data_to_writing(titles, contents, images)
+    writer.prepare_data_to_writing(@titles, @contents, @images)
     writer.write_data
   end
 
@@ -41,15 +47,15 @@ class Scrapper
   end
 
   def find_images_hrefs
-    @images + scrap_imges
+    @images = scrap_imges
   end
 
   def find_news_content
-    @images + scrap_contents
+    @contents = scrap_contents
   end
 
   def find_news_titles
-    @titles + scrap_titles
+    @titles = scrap_titles
   end
 
   def go_to_news
@@ -65,7 +71,7 @@ class Scrapper
         elements_array << item.style('background-image').to_s[4..-3]
       end
     end
-    elements_array.uniq!
+    elements_array
   end
 
   def scrap_titles
@@ -73,7 +79,7 @@ class Scrapper
     @driver.find_elements(:class, TITLE).each do |item|
       elements_array << item.text[0..199] unless item.text.to_s.empty?
     end
-    elements_array.uniq!
+    elements_array
   end
 
   def scrap_contents
@@ -81,7 +87,7 @@ class Scrapper
     @driver.find_elements(:class, CONTENT).each do |item|
       elements_array << item.text[0..199] unless item.text.to_s.empty?
     end
-    elements_array.uniq!
+    elements_array
   end
 
   def more_news

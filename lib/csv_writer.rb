@@ -11,13 +11,9 @@ class CSVWriter
     @data_to_write = []
   end
 
-  def prepare_data_to_writing(first_arr, second_arr, third_arr)
-    (0..first_arr.size).each do |i|
-      temp = []
-      temp << first_arr[i]
-      temp << second_arr[i]
-      temp << third_arr[i]
-      @data_to_write << temp
+  def prepare_data_to_writing(*arrays)
+    (0..arrays.first.size).each do |i, result|
+      @data_to_write = arrays.each_with_object([]) { |data| temp << data[i] }
     end
   end
 

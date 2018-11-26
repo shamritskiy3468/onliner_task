@@ -10,7 +10,8 @@ class Scrapper
   attr_accessor :options
 
   def initialize(driver)
-    @driver = driver.get(ONLINER_URL)
+    @driver = driver
+    driver.get(ONLINER_URL)
     @images = []
     @titles = []
     @contents = []
@@ -25,7 +26,7 @@ class Scrapper
     writer.write_data
   end
 
-private
+  private
 
   def find_all_info
     find_images_hrefs
@@ -50,19 +51,19 @@ private
   end
 
   def scrap_all(class_element)
-    @driver.find_elements(:class, element_class).each_with_object([]) do |item, elements_array|
+    @driver.find_elements(:class, class_element).each_with_object([]) do |item, elements_array|
       elements_array << item.text[0..199] unless item.text.to_s.empty?
     end
   end
 
   def scrap_imges
     @driver.find_elements(:class, IMG).each_with_object([]) do |item, elements_array|
-      elements_array << item.style(IMG_STYLE).to_s[4..-3] unless item.to_s.empty?
+      elements_array << item.style(IMG_STYLE).to_s[4..-3]
     end
   end
 
   def scrap_uniq(class_element)
-    scrapp_all(class_element)
+    scrap_all(class_element)
   end
 
   def scrap_titles
@@ -74,6 +75,6 @@ private
   end
 
   def more_news
-    @driver.find_element(:class, 'news-more__button').click
+    @driver.find_element(:class, MORE_BUTTON).click
   end
 end

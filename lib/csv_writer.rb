@@ -8,19 +8,19 @@ class CSVWriter
 
   def initialize(file)
     @file = file
-    @data_to_write = []
+    @data = []
   end
 
   def prepare_data_to_writing(*arrays)
-    (0..arrays.first.size).each do |i, result|
-      @data_to_write = arrays.each_with_object([]) { |data| temp << data[i] }
+    (0...arrays.first.size).each do |i|
+      @data << arrays.each_with_object([]) { |data, temp| temp << data[i] }
     end
   end
 
   def write_data
     CSV.open(@file, 'a+') do |csv|
-      (0..@data_to_write.size).each do |index|
-        csv << @data_to_write[index]
+      (0..@data.size - 1).each do |index|
+        csv << @data[index]
       end
     end
   end

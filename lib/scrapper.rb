@@ -25,6 +25,8 @@ class Scrapper
     writer.write_data
   end
 
+private
+
   def find_all_info
     find_images_hrefs
     find_news_content
@@ -46,8 +48,6 @@ class Scrapper
   def go_to_news
     @driver.find_element(:link_text, PEOPLE).click
   end
-
-private
 
   def scrap_all(class_element)
     @driver.find_elements(:class, element_class).each_with_object([]) do |item, elements_array|

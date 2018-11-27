@@ -7,7 +7,7 @@ require 'pry'
 
 # main class for onliner scrapping
 class Scrapper
-  attr_accessor :options
+  attr_accessor :options, :titles, :contents, :images
 
   def initialize(driver)
     @driver = driver
@@ -21,9 +21,6 @@ class Scrapper
     go_to_news
     more_news
     find_all_info
-    writer = CSVWriter.new('onliner_data.csv')
-    writer.prepare_data_to_writing(@titles, @contents, @images)
-    writer.write_data
   end
 
   private
